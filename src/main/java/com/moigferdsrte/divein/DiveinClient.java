@@ -55,7 +55,7 @@ public class DiveinClient implements ClientModInitializer {
             if (player instanceof LocalPlayer) {
                 ModifierLayer<IAnimation> testAnimation =  new ModifierLayer<>();
 
-                testAnimation.addModifierBefore(new SpeedModifier(0.52f));
+                testAnimation.addModifierBefore(new SpeedModifier(0.5f));
                 testAnimation.addModifierBefore(new MirrorModifier(true));
                 return testAnimation;
             }
@@ -89,7 +89,7 @@ public class DiveinClient implements ClientModInitializer {
 
             if (animationLayer != null) {
                 animationLayer.replaceAnimationWithFade(
-                        AbstractFadeModifier.functionalFadeIn(25, (modelName, type, value) -> value),
+                        AbstractFadeModifier.functionalFadeIn(0, (modelName, type, value) -> value),
                         null
                 );
             }
@@ -128,9 +128,9 @@ public class DiveinClient implements ClientModInitializer {
 
                 if (diveAnimation != null) {
                     animationLayer.replaceAnimationWithFade(
-                            AbstractFadeModifier.functionalFadeIn(60, (modelName, type, value) -> value),
+                            AbstractFadeModifier.functionalFadeIn(100, (modelName, type, value) -> value),
                             new KeyframeAnimationPlayer(diveAnimation)
-                                    .setFirstPersonMode(FirstPersonMode.DISABLED)
+                                    .setFirstPersonMode(FirstPersonMode.VANILLA)
                                     .setFirstPersonConfiguration(new FirstPersonConfiguration()
                                             .setShowRightArm(true)
                                             .setShowLeftItem(false))
@@ -139,7 +139,7 @@ public class DiveinClient implements ClientModInitializer {
 
                     new Thread(() -> {
                         try {
-                            Thread.sleep(200);
+                            Thread.sleep(1000);
                             playerAnimationStates.put(uuid, false);
                         } catch (InterruptedException e) {
                             Thread.currentThread().interrupt();

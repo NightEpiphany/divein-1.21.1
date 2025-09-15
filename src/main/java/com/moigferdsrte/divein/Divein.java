@@ -63,6 +63,7 @@ public class Divein implements ModInitializer {
 	}
 
     private boolean checkWaterBelow(Player player, int blocks) {
+        if (player.isInWater()) return true;
         for (int i = 1; i <= blocks; i++) {
             if (player.level().getBlockState(player.blockPosition().below(i)).getFluidState().getType() == Fluids.WATER &&
                     player.level().getBlockState(player.blockPosition().below(i - 1)).is(BlockTags.AIR)) {
