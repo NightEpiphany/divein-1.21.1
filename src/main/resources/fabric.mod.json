@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "divein",
+	"version": "${version}",
+	"name": "Divein",
+	"description": "Custom animation to dive into the water!",
+	"authors": [
+		"NightEpiphany"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/divein/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.moigferdsrte.divein.Divein"
+		],
+      "client": [
+        "com.moigferdsrte.divein.DiveinClient"
+      ]
+	},
+	"mixins": [
+		"divein.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*",
+        "playeranimator": ">=2.0.0+1.21.1"
+	},
+	"suggests": {
+		"geckolib": "*"
+	}
+}
