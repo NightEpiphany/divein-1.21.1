@@ -8,8 +8,8 @@
 		"NightEpiphany"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/mod/dive-in/",
+		"sources": "https://github.com/NightEpiphany/divein-1.21.1"
 	},
 	"license": "MIT",
 	"icon": "assets/divein/icon.png",

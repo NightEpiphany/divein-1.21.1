@@ -39,12 +39,13 @@ public class Divein implements ModInitializer {
         DiveinEvent.DIVEIN_WATER_EVENT.register((player, level) -> {
             if (!player.level().isClientSide()) return;
 
-            boolean isFalling = player.getDeltaMovement().y < 0
+
+            boolean isFalling = player.getDeltaMovement().y < -0.385f
                     && !player.onGround()
                     && level.getBlockState(player.blockPosition().below()).is(BlockTags.AIR)
                     && !player.getAbilities().flying;
 
-            boolean isWaterBelow = checkWaterBelow(player, 66);
+            boolean isWaterBelow = checkWaterBelow(player, 28);
 
             if (isFalling && isWaterBelow && !hasTriggeredDive) {
                 hasTriggeredDive = true;

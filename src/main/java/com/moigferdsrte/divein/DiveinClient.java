@@ -44,14 +44,14 @@ public class DiveinClient implements ClientModInitializer {
             if (player instanceof LocalPlayer) {
                 ModifierLayer<IAnimation> testAnimation =  new ModifierLayer<>();
 
-                testAnimation.addModifierBefore(new SpeedModifier(0.852f)); //This will be medium speed
+                testAnimation.addModifierBefore(new SpeedModifier(0.8523f)); //This will be medium speed
                 testAnimation.addModifierBefore(new MirrorModifier(true));
                 return testAnimation;
             }
             return null;
         });
 
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ResourceLocation.fromNamespaceAndPath(Divein.MOD_ID, "rollback"), 45, (player) -> {
+        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ResourceLocation.fromNamespaceAndPath(Divein.MOD_ID, "animation2"), 45, (player) -> {
             if (player instanceof LocalPlayer) {
                 ModifierLayer<IAnimation> testAnimation =  new ModifierLayer<>();
 
@@ -73,29 +73,17 @@ public class DiveinClient implements ClientModInitializer {
 
     }
 
-    public static void stopAnimation(UUID playerId) {
-        playerAnimationStates.put(playerId, false);
+    public static void playWaterFloatingAnimation() {
+        ModifierLayer<IAnimation> testAnimation = (ModifierLayer<IAnimation>) PlayerAnimationAccess
+                .getPlayerAssociatedData(Minecraft.getInstance().player)
+                .get(ResourceLocation.fromNamespaceAndPath(Divein.MOD_ID, "animation2"));
 
-        try {
-            Level level = Minecraft.getInstance().level;
-            if (level == null) return;
-
-            Player player = level.getPlayerByUUID(playerId);
-            if (player == null || !(player instanceof AbstractClientPlayer)) return;
-
-            ModifierLayer<IAnimation> animationLayer = (ModifierLayer<IAnimation>) PlayerAnimationAccess
-                    .getPlayerAssociatedData((AbstractClientPlayer) player)
-                    .get(ResourceLocation.fromNamespaceAndPath(Divein.MOD_ID, "rollback"));
-
-            if (animationLayer != null) {
-                animationLayer.replaceAnimationWithFade(
-                        AbstractFadeModifier.functionalFadeIn(0, (modelName, type, value) -> value),
-                        null
-                );
-            }
-        } catch (Exception e) {
-            Divein.LOGGER.error("Failed to stop dive animation for player {}", playerId, e);
-        }
+        assert testAnimation != null;
+        testAnimation.replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(40, (modelName, type, value) -> value),
+                new KeyframeAnimationPlayer((KeyframeAnimation) PlayerAnimationRegistry.getAnimation(ResourceLocation.fromNamespaceAndPath(Divein.MOD_ID, "floating")))
+                        .setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL)
+                        .setFirstPersonConfiguration(new FirstPersonConfiguration().setShowRightArm(true).setShowLeftItem(false))
+        );
     }
 
     public static void playDiveAnimation() {
@@ -130,7 +118,7 @@ public class DiveinClient implements ClientModInitializer {
                     animationLayer.replaceAnimationWithFade(
                             AbstractFadeModifier.functionalFadeIn(100, (modelName, type, value) -> value),
                             new KeyframeAnimationPlayer(diveAnimation)
-                                    .setFirstPersonMode(FirstPersonMode.VANILLA)
+                                    .setFirstPersonMode(FirstPersonMode.DISABLED)
                                     .setFirstPersonConfiguration(new FirstPersonConfiguration()
                                             .setShowRightArm(true)
                                             .setShowLeftItem(false))
