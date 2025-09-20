@@ -1,0 +1,6 @@
+{
+  "text.autoconfig.divein.option.triggerSensitivity":"Animation Trigger Sensitivity",
+  "text.autoconfig.divein.option.triggerSensitivity.@Tooltip":"Range: (LOWEST) 0 - 1 (HIGHEST)",
+  "text.autoconfig.divein.option.fluidLevelDetectHeight":"Fluid Level Detect Height",
+  "text.autoconfig.divein.option.fluidLevelDetectHeight.@Tooltip":"Max detect blocks of fluid underneath"
+}

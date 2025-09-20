@@ -1,0 +1,6 @@
+{
+  "text.autoconfig.divein.option.triggerSensitivity":"动画触发灵敏度",
+  "text.autoconfig.divein.option.triggerSensitivity.@Tooltip":"范围: (最低) 0 - 1 (最高)",
+  "text.autoconfig.divein.option.fluidLevelDetectHeight":"液面检测高度",
+  "text.autoconfig.divein.option.fluidLevelDetectHeight.@Tooltip":"玩家自由落体时检测下方液面的最大格数"
+}

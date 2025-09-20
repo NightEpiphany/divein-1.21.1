@@ -9,14 +9,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public record DiveinPosePayload(UUID uuid) implements CustomPacketPayload {
+public record DiveinPosePayload(UUID uuid, boolean isWater) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<DiveinPosePayload> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(Divein.MOD_ID, "sync"));
 
     public static final StreamCodec<FriendlyByteBuf, DiveinPosePayload> CODEC = StreamCodec.of(
             (buf, playLoad) -> {
                 buf.writeUUID(playLoad.uuid);
+                buf.writeBoolean(playLoad.isWater);
             },
-            buf -> new DiveinPosePayload(buf.readUUID())
+            buf -> new DiveinPosePayload(buf.readUUID(), buf.readBoolean())
     );
 
     @Override
