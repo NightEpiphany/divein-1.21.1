@@ -1,6 +1,10 @@
 {
-  "text.autoconfig.divein.option.triggerSensitivity":"Animation Trigger Sensitivity",
-  "text.autoconfig.divein.option.triggerSensitivity.@Tooltip":"Range: (LOWEST) 0 - 1 (HIGHEST)",
-  "text.autoconfig.divein.option.fluidLevelDetectHeight":"Fluid Level Detect Height",
-  "text.autoconfig.divein.option.fluidLevelDetectHeight.@Tooltip":"Max detect blocks of fluid underneath"
+  "divein.configuration.triggerSensitivity":"Animation Trigger Sensitivity",
+  "divein.configuration.fluidLevelDetectHeight":"Fluid Level Detect Height",
+  "divein.configuration.section.divein.common.toml": "Common",
+  "divein.configuration.section.divein.common.toml.title": "Settings",
+  "divein.configuration.title": "Config",
+  "divein.configuration.fluidLevelDetectHeight.tooltip": "Max detect blocks of fluid underneath",
+  "divein.configuration.triggerSensitivity.tooltip": "Range: (LOWEST) 0 - 1 (HIGHEST)",
+  "divein.networking.failed": "Network Failed"
 }

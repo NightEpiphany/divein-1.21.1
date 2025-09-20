@@ -1,6 +1,5 @@
-package com.moigferdsrte.divein.network;
+package org.moigferdsrte.network;
 
-import com.moigferdsrte.divein.Divein;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -9,8 +8,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+import static org.moigferdsrte.Divein.MODID;
+
 public record DiveinPosePayload(UUID uuid, boolean isWater) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<DiveinPosePayload> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(Divein.MOD_ID, "sync"));
+    public static final CustomPacketPayload.Type<DiveinPosePayload> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(MODID, "sync"));
 
     public static final StreamCodec<FriendlyByteBuf, DiveinPosePayload> CODEC = StreamCodec.of(
             (buf, playLoad) -> {
