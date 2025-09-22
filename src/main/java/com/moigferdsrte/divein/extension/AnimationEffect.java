@@ -1,0 +1,24 @@
+package com.moigferdsrte.divein.extension;
+
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.Random;
+
+public record AnimationEffect() {
+    public record Visuals(String animationName, Particles particles) { }
+
+    public enum Particles {
+        DIVE
+    }
+
+    private static final Random random = new Random();
+    public static void playVisuals(Visuals visuals, Player player, Vec3 direction) {
+        ((AnimatablePlayer)player).divein_1_21_1$playDiveAnimation(visuals.animationName(), direction);
+
+        player.level().playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.CALCITE_FALL, SoundSource.BLOCKS, 1, 1);
+
+    }
+}

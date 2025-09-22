@@ -12,4 +12,8 @@ public class DiveinEvent {
                         callback.update(player, level);
                     }
             });
+
+    public @interface SyncForServer {
+        boolean value() default true;
+    }
 }

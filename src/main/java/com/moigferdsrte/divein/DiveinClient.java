@@ -1,6 +1,9 @@
 package com.moigferdsrte.divein;
 
+import com.moigferdsrte.divein.event.DiveinEvent;
+import com.moigferdsrte.divein.network.ClientNetwork;
 import com.moigferdsrte.divein.network.DiveinPosePayload;
+import com.moigferdsrte.divein.network.Packets;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonConfiguration;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonMode;
 import dev.kosmx.playerAnim.api.layered.IAnimation;
@@ -38,6 +41,8 @@ public class DiveinClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
 
+        ClientPlayNetworking.registerGlobalReceiver(Packets.DiveAnimation.TYPE, (packet, context) -> ClientNetwork.handleDiveAnimation(packet));
+
 
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ResourceLocation.fromNamespaceAndPath(Divein.MOD_ID, "animation"), 45, (player) -> {
             if (player instanceof LocalPlayer) {
@@ -50,50 +55,16 @@ public class DiveinClient implements ClientModInitializer {
             return null;
         });
 
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ResourceLocation.fromNamespaceAndPath(Divein.MOD_ID, "animation2"), 45, (player) -> {
-            if (player instanceof LocalPlayer) {
-                ModifierLayer<IAnimation> testAnimation =  new ModifierLayer<>();
-
-                testAnimation.addModifierBefore(new SpeedModifier(0.5f));
-                testAnimation.addModifierBefore(new MirrorModifier(true));
-                return testAnimation;
-            }
-            return null;
-        });
-
-        ClientPlayNetworking.registerGlobalReceiver(DiveinPosePayload.TYPE, (payload, context) -> {
-            context.client().execute(() -> {
-                LocalPlayer localPlayer = Minecraft.getInstance().player;
-                if (localPlayer != null && !localPlayer.getUUID().equals(payload.uuid())) {
-                    playDiveAnimation(payload.uuid(), payload.isWater());
-                }
-            });
-        });
-
     }
 
-    public static void playWaterFloatingAnimation() {
-        ModifierLayer<IAnimation> testAnimation = (ModifierLayer<IAnimation>) PlayerAnimationAccess
-                .getPlayerAssociatedData(Minecraft.getInstance().player)
-                .get(ResourceLocation.fromNamespaceAndPath(Divein.MOD_ID, "animation2"));
-
-        assert testAnimation != null;
-        testAnimation.replaceAnimationWithFade(AbstractFadeModifier.functionalFadeIn(40, (modelName, type, value) -> value),
-                new KeyframeAnimationPlayer((KeyframeAnimation) PlayerAnimationRegistry.getAnimation(ResourceLocation.fromNamespaceAndPath(Divein.MOD_ID, "floating")))
-                        .setFirstPersonMode(FirstPersonMode.THIRD_PERSON_MODEL)
-                        .setFirstPersonConfiguration(new FirstPersonConfiguration().setShowRightArm(true).setShowLeftItem(false))
-        );
-    }
-
+    @DiveinEvent.SyncForServer(value = false)
     public static void playDiveAnimation(boolean isWater) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
 
         playDiveAnimation(player.getUUID(), isWater);
-
-        //ClientPlayNetworking.send(new DiveinPosePayload(player.getUUID(), isWater));
     }
-
+    @DiveinEvent.SyncForServer(value = false)
     public static void playDiveAnimation(UUID uuid, boolean isWater) {
         if (playerAnimationStates.getOrDefault(uuid, false)) return;
         playerAnimationStates.put(uuid, true);
