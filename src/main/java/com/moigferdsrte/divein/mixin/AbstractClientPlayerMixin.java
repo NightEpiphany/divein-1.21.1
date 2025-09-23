@@ -5,6 +5,8 @@ import com.moigferdsrte.divein.event.DiveinEvent;
 import com.moigferdsrte.divein.extension.AdjustmentModifier;
 import com.moigferdsrte.divein.extension.AnimatablePlayer;
 import com.mojang.authlib.GameProfile;
+import dev.kosmx.playerAnim.api.firstPerson.FirstPersonConfiguration;
+import dev.kosmx.playerAnim.api.firstPerson.FirstPersonMode;
 import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
 import dev.kosmx.playerAnim.api.layered.modifier.AbstractFadeModifier;
@@ -27,10 +29,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerMixin extends Player implements AnimatablePlayer {
+
+    @Unique
+    private static final Map<UUID, Boolean> playerAnimationStates = new HashMap<>();
 
     @Unique
     private final ModifierLayer<KeyframeAnimationPlayer> base = new ModifierLayer<>(null);
@@ -47,26 +55,41 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
     @DiveinEvent.SyncForServer
     @Override
     public void divein_1_21_1$playDiveAnimation(String animationName, Vec3 direction) {
+        if (playerAnimationStates.getOrDefault(uuid, false)) return;
+        playerAnimationStates.put(uuid, true);
         try {
             KeyframeAnimation animation = (KeyframeAnimation) PlayerAnimationRegistry.getAnimation(ResourceLocation.fromNamespaceAndPath(Divein.MOD_ID, animationName));
             assert animation != null;
             var copy = animation.mutableCopy();
             lastRollDirection = direction;
 
-            var fadeIn = copy.beginTick;
             speedModifier.speed = 0.8523f;
             base.replaceAnimationWithFade(
-                    AbstractFadeModifier.standardFadeIn(fadeIn, Ease.INOUTSINE),
-                    new KeyframeAnimationPlayer(copy.build(), 0));
+                    AbstractFadeModifier.functionalFadeIn(100, (modelName, type, value) -> value),
+                    new KeyframeAnimationPlayer(copy.build())
+                            .setFirstPersonMode(FirstPersonMode.DISABLED)
+                            .setFirstPersonConfiguration(new FirstPersonConfiguration()
+                                    .setShowRightArm(true)
+                                    .setShowLeftItem(false)));
+
+            new Thread(() -> {
+                try {
+                    Thread.sleep(1000);
+                    playerAnimationStates.put(uuid, false);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }).start();
         } catch (Exception e) {
             Divein.LOGGER.error("Failed to play dive animation for player ", e);
+            playerAnimationStates.put(uuid, false);
         }
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void postInit(ClientLevel clientLevel, GameProfile gameProfile, CallbackInfo ci) {
         @SuppressWarnings("UnstableApiUsage") var stack = ((IAnimatedPlayer) this).getAnimationStack();
-        base.addModifier(createAdjustmentModifier(), 0);
+        //base.addModifier(createAdjustmentModifier(), 0);
         base.addModifier(speedModifier, 0);
         speedModifier.speed = 1.02f;
         stack.addAnimLayer(1000, base);
@@ -84,10 +107,10 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
         return angle;
     }
 
-    @Inject(method = "tick", at = @At("HEAD"))
-    public void tick(CallbackInfo ci) {
-        DiveinEvent.DIVEIN_WATER_EVENT.invoker().update(this, this.level());
-    }
+//    @Inject(method = "tick", at = @At("HEAD"))
+//    public void tick(CallbackInfo ci) {
+//        DiveinEvent.DIVEIN_WATER_EVENT.invoker().update(this, this.level());
+//    }
 
     @Unique
     private AdjustmentModifier createAdjustmentModifier() {

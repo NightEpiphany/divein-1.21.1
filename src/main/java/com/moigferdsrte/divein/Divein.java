@@ -21,7 +21,7 @@ public class Divein implements ModInitializer {
 	public static final String MOD_ID = "divein";
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    private static boolean hasTriggeredDive = false;
+    public static boolean hasTriggeredDive = false;
 
     public static ConfigHolder<DiveinConfig> configHolder;
     public static DiveinConfig config;
@@ -32,9 +32,7 @@ public class Divein implements ModInitializer {
         PayloadTypeRegistry.playC2S().register(Packets.AnimationPublish.TYPE, Packets.AnimationPublish.CODEC);
         PayloadTypeRegistry.playS2C().register(Packets.DiveAnimation.TYPE, Packets.DiveAnimation.CODEC);
 
-        ServerPlayNetworking.registerGlobalReceiver(Packets.AnimationPublish.TYPE, (packet, context) -> {
-            ServerNetwork.handleDivePublish(packet, context.server(), context.player());
-        });
+        ServerPlayNetworking.registerGlobalReceiver(Packets.AnimationPublish.TYPE, (packet, context) -> ServerNetwork.handleDivePublish(packet, context.server(), context.player()));
 
         AutoConfig.register(DiveinConfig.class, GsonConfigSerializer::new);
         configHolder = AutoConfig.getConfigHolder(DiveinConfig.class);
@@ -71,7 +69,7 @@ public class Divein implements ModInitializer {
 		LOGGER.info("Divein!");
 	}
 
-    private boolean checkWaterBelow(Player player, int blocks) {
+    public static boolean checkWaterBelow(Player player, int blocks) {
         if (player.isInWater()) return true;
         for (int i = 1; i <= blocks; i++) {
             if (player.level().getBlockState(player.blockPosition().below(i)).getFluidState().getType() == Fluids.WATER &&
@@ -83,7 +81,7 @@ public class Divein implements ModInitializer {
         return false;
     }
 
-    private boolean checkLavaBelow(Player player, int blocks) {
+    public static boolean checkLavaBelow(Player player, int blocks) {
         if (player.isInLava()) return true;
         for (int i = 1; i <= blocks; i++) {
             if (player.level().getBlockState(player.blockPosition().below(i)).getFluidState().getType() == Fluids.LAVA &&

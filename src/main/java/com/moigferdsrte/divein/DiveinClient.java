@@ -2,7 +2,6 @@ package com.moigferdsrte.divein;
 
 import com.moigferdsrte.divein.event.DiveinEvent;
 import com.moigferdsrte.divein.network.ClientNetwork;
-import com.moigferdsrte.divein.network.DiveinPosePayload;
 import com.moigferdsrte.divein.network.Packets;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonConfiguration;
 import dev.kosmx.playerAnim.api.firstPerson.FirstPersonMode;
@@ -24,7 +23,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 

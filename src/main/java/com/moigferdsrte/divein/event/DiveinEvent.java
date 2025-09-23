@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.event.EventFactory;
 
 public class DiveinEvent {
 
+
     public static final Event<DiveinWaterCallback> DIVEIN_WATER_EVENT =
             EventFactory.createArrayBacked(DiveinWaterCallback.class, call -> (player, level) -> {
                 if (player.getDeltaMovement().y < 0)
