@@ -34,43 +34,13 @@ public class Divein {
 
     public Divein(IEventBus modEventBus, ModContainer modContainer) {
 
-        NeoForge.EVENT_BUS.addListener(TriggerEventHandler::onPlayerFall);
+        //NeoForge.EVENT_BUS.addListener(TriggerEventHandler::onPlayerFall);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
 
     @SubscribeEvent
     public static void register(final RegisterPayloadHandlersEvent event) {
-        final PayloadRegistrar registrar = event.registrar("1");
-        registrar.executesOn(HandlerThread.NETWORK).playBidirectional(
-                DiveinPosePayload.TYPE,
-                DiveinPosePayload.CODEC,
-                new DirectionalPayloadHandler<>(
-                        Divein::handleDataOnNetworkClient,
-                        Divein::handleDataOnNetworkServer
-                )
-        );
-    }
 
-    public static void handleDataOnNetworkServer(final DiveinPosePayload payload, final IPayloadContext context) {
-        context.enqueueWork(() -> PacketDistributor.sendToAllPlayers(payload))
-                .exceptionally(e -> {
-                    context.disconnect(Component.translatable("divein.networking.failed", e.getMessage()));
-                    return null;
-                });
-    }
-
-    public static void handleDataOnNetworkClient(final DiveinPosePayload payload, final IPayloadContext context) {
-        Player localPlayer = context.player();
-
-        context.enqueueWork(() -> {
-                    if (!localPlayer.getUUID().equals(payload.uuid())) {
-                        playDiveAnimation(payload.uuid(), payload.isWater());
-                    }
-                })
-                .exceptionally(e -> {
-                    context.disconnect(Component.translatable("divein.networking.failed", e.getMessage()));
-                    return null;
-                });
     }
 }

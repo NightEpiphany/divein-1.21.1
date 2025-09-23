@@ -49,7 +49,7 @@ public class DiveinClient {
             if (player instanceof LocalPlayer) {
                 ModifierLayer<IAnimation> testAnimation =  new ModifierLayer<>();
 
-                testAnimation.addModifierBefore(new SpeedModifier(0.8523f)); //This will be medium speed
+                testAnimation.addModifierBefore(new SpeedModifier(0.8523f));
                 testAnimation.addModifierBefore(new MirrorModifier(true));
                 return testAnimation;
             }

@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import static org.moigferdsrte.Divein.MODID;
 
+@Deprecated
 public record DiveinPosePayload(UUID uuid, boolean isWater) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<DiveinPosePayload> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(MODID, "sync"));
 
