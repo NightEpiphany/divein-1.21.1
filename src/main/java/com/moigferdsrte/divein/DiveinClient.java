@@ -38,10 +38,11 @@ public class DiveinClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-
         ClientPlayNetworking.registerGlobalReceiver(Packets.DiveAnimation.TYPE, (packet, context) -> ClientNetwork.handleDiveAnimation(packet));
+    }
 
-
+    @Deprecated
+    public void factory() {
         PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ResourceLocation.fromNamespaceAndPath(Divein.MOD_ID, "animation"), 45, (player) -> {
             if (player instanceof LocalPlayer) {
                 ModifierLayer<IAnimation> testAnimation =  new ModifierLayer<>();
@@ -52,7 +53,6 @@ public class DiveinClient implements ClientModInitializer {
             }
             return null;
         });
-
     }
 
     @DiveinEvent.SyncForServer(value = false)

@@ -9,6 +9,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.effect.MobEffects;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -41,7 +42,8 @@ public abstract class ClientPacketSenderMixin {
         waterDrop = checkWaterBelow(player, Divein.config.fluidLevelDetectHeight);
         lavaDrop = checkLavaBelow(player, Divein.config.fluidLevelDetectHeight * 2);
         if (waterDrop || lavaDrop) {
-            tryPlayAnimationOnServerside();
+            if (player.getDeltaMovement().y < 0)
+                tryPlayAnimationOnServerside();
         }
     }
 
@@ -51,6 +53,7 @@ public abstract class ClientPacketSenderMixin {
         if (player == null || client.isPaused() || client.screen != null) {
             return;
         }
+        boolean hasRes = player.hasEffect(MobEffects.FIRE_RESISTANCE);
         float sensitivity = Divein.config.triggerSensitivity;
         if (sensitivity < 0) sensitivity = 0;
         if (sensitivity > 1) sensitivity = 1;
@@ -59,7 +62,7 @@ public abstract class ClientPacketSenderMixin {
                 && Objects.requireNonNull(client.level).getBlockState(player.blockPosition().below()).is(BlockTags.AIR)
                 && !player.getAbilities().flying;
         if (isFalling) {
-            if (waterDrop) {
+            if (waterDrop || hasRes) {
                 var visuals = new AnimationEffect.Visuals("dive", AnimationEffect.Particles.DIVE);
                 ServerNetwork.networkC2S_Send(new Packets.AnimationPublish(player.getId(), visuals, player.getDeltaMovement()));
                 AnimationEffect.playVisuals(visuals, player, player.getDeltaMovement());

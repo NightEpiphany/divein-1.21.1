@@ -36,7 +36,10 @@ public class ServerNetwork {
         world.getServer().executeIfPossible(() -> {
 
             var proxy = (Event.Proxy<ServersideDiveEvents.PlayerStart>)ServersideDiveEvents.PLAYER_START;
-            proxy.handlers.forEach(handler -> { handler.onPlayerStartedDiving(player, velocity);});
+            proxy.handlers.forEach(handler -> {
+                handler.onPlayerStartedDiving(player, velocity);
+                proxy.register(handler);
+            });
         });
     }
 

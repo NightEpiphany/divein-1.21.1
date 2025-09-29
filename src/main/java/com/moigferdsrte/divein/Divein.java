@@ -38,6 +38,13 @@ public class Divein implements ModInitializer {
         configHolder = AutoConfig.getConfigHolder(DiveinConfig.class);
         config = configHolder.getConfig();
 
+
+
+		LOGGER.info("Divein!");
+	}
+
+    @Deprecated
+    public void eventHook() {
         DiveinEvent.DIVEIN_WATER_EVENT.register((player, level) -> {
             if (!player.level().isClientSide()) return;
             float sensitivity = Divein.config.triggerSensitivity;
@@ -65,9 +72,7 @@ public class Divein implements ModInitializer {
                 hasTriggeredDive = false;
             }
         });
-
-		LOGGER.info("Divein!");
-	}
+    }
 
     public static boolean checkWaterBelow(Player player, int blocks) {
         if (player.isInWater()) return true;

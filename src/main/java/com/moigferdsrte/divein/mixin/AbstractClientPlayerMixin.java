@@ -12,7 +12,6 @@ import dev.kosmx.playerAnim.api.layered.ModifierLayer;
 import dev.kosmx.playerAnim.api.layered.modifier.AbstractFadeModifier;
 import dev.kosmx.playerAnim.api.layered.modifier.SpeedModifier;
 import dev.kosmx.playerAnim.core.data.KeyframeAnimation;
-import dev.kosmx.playerAnim.core.util.Ease;
 import dev.kosmx.playerAnim.core.util.Vec3f;
 import dev.kosmx.playerAnim.impl.IAnimatedPlayer;
 import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
@@ -46,7 +45,7 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
     private final SpeedModifier speedModifier = new SpeedModifier();
 
     @Unique
-    private Vec3 lastRollDirection;
+    private Vec3 divingDirection;
 
     public AbstractClientPlayerMixin(Level level, BlockPos blockPos, float f, GameProfile gameProfile) {
         super(level, blockPos, f, gameProfile);
@@ -59,9 +58,13 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
         playerAnimationStates.put(uuid, true);
         try {
             KeyframeAnimation animation = (KeyframeAnimation) PlayerAnimationRegistry.getAnimation(ResourceLocation.fromNamespaceAndPath(Divein.MOD_ID, animationName));
-            assert animation != null;
-            var copy = animation.mutableCopy();
-            lastRollDirection = direction;
+
+            KeyframeAnimation.AnimationBuilder copy;
+            if (animation == null)
+                return;
+            copy = animation.mutableCopy();
+
+            divingDirection = direction;
 
             speedModifier.speed = 0.8523f;
             base.replaceAnimationWithFade(
@@ -124,10 +127,10 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
             float offsetZ = 0;
 
             if (partName.equals("body")) {
-                if (lastRollDirection != null) {
+                if (divingDirection != null) {
                     var absoluteOrientation = new Vec3(0, 0, 1).yRot((float) Math.toRadians(-1.0 * player.yBodyRot));
-                    float angle = (float) angleWithSignBetween(absoluteOrientation, lastRollDirection, new Vec3(0, 1, 0));
-                    rotationY = (float) Math.toRadians(angle); // + 180;
+                    float angle = (float) angleWithSignBetween(absoluteOrientation, divingDirection, new Vec3(0, 1, 0));
+                    rotationY = (float) Math.toRadians(angle);
                 } else {
                     return Optional.empty();
                 }
