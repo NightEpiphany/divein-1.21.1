@@ -3,6 +3,7 @@ package org.moigferdsrte.mixin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.effect.MobEffects;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
@@ -53,6 +54,7 @@ public abstract class ClientPacketSenderMixin {
         if (player == null || client.isPaused() || client.screen != null) {
             return;
         }
+        boolean hasRes = player.hasEffect(MobEffects.FIRE_RESISTANCE);
         double sensitivity = Config.triggerSensitivity;
         if (sensitivity < 0) sensitivity = 0;
         if (sensitivity > 1) sensitivity = 1;
@@ -60,7 +62,7 @@ public abstract class ClientPacketSenderMixin {
                 && !player.onGround()
                 && Objects.requireNonNull(client.level).getBlockState(player.blockPosition().below()).is(BlockTags.AIR)
                 && !player.getAbilities().flying;
-        if (isFalling) {
+        if (isFalling || hasRes) {
             if (divein_1_21_1_neo$waterDrop) {
                 var visuals = new AnimationEffect.Visuals("dive", AnimationEffect.Particles.DIVE);
                 ServerNetwork.networkC2S_Send(new Packets.AnimationPublish(player.getId(), visuals, player.getDeltaMovement()));

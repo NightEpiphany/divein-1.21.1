@@ -17,8 +17,5 @@ public record AnimationEffect() {
     private static final Random random = new Random();
     public static void playVisuals(Visuals visuals, Player player, Vec3 direction) {
         ((AnimatablePlayer)player).divein_1_21_1$playDiveAnimation(visuals.animationName(), direction);
-
-        player.level().playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.CALCITE_FALL, SoundSource.BLOCKS, 1, 1);
-
     }
 }

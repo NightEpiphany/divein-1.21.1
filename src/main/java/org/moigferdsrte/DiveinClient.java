@@ -55,17 +55,6 @@ public class DiveinClient {
             }
             return null;
         });
-
-        PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ResourceLocation.fromNamespaceAndPath(Divein.MODID, "animation2"), 45, (player) -> {
-            if (player instanceof LocalPlayer) {
-                ModifierLayer<IAnimation> testAnimation =  new ModifierLayer<>();
-
-                testAnimation.addModifierBefore(new SpeedModifier(0.5f));
-                testAnimation.addModifierBefore(new MirrorModifier(true));
-                return testAnimation;
-            }
-            return null;
-        });
     }
 
     public static void playDiveAnimation(boolean isWater) {
