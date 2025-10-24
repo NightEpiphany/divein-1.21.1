@@ -1,10 +1,9 @@
-package org.moigferdsrte.extension;
+package com.moigferdsrte.divein.extension;
 
-
+import com.moigferdsrte.divein.event.DiveinEvent;
 import net.minecraft.world.phys.Vec3;
-import org.moigferdsrte.event.TriggerEventHandler;
 
 public interface AnimatablePlayer {
-    @TriggerEventHandler.SyncForServer
+    @DiveinEvent.SyncForServer
     void divein_1_21_1$playDiveAnimation(String animationName, Vec3 direction);
 }

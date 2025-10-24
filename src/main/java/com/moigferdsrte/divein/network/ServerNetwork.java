@@ -1,15 +1,17 @@
-package org.moigferdsrte.network;
+package com.moigferdsrte.divein.network;
 
 import com.google.common.collect.Iterables;
+import com.moigferdsrte.divein.Divein;
+import com.moigferdsrte.divein.event.api.Event;
+import com.moigferdsrte.divein.event.api.ServersideDiveEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
-import org.moigferdsrte.Divein;
-import org.moigferdsrte.event.api.Event;
-import org.moigferdsrte.event.api.ServersideDiveEvents;
 
 import java.util.Collection;
 
@@ -34,27 +36,30 @@ public class ServerNetwork {
         world.getServer().executeIfPossible(() -> {
 
             var proxy = (Event.Proxy<ServersideDiveEvents.PlayerStart>)ServersideDiveEvents.PLAYER_START;
-            proxy.handlers.forEach(handler -> { handler.onPlayerStartedDiving(player, velocity);});
+            proxy.handlers.forEach(handler -> {
+                handler.onPlayerStartedDiving(player, velocity);
+                proxy.register(handler);
+            });
         });
     }
 
     public static Collection<ServerPlayer> tracking(ServerPlayer player) {
-        return (Collection<ServerPlayer>) player.serverLevel().getPlayers((serverPlayer) -> serverPlayer.getId() != player.getId());
+        return PlayerLookup.tracking(player);
     }
 
     public static Collection<ServerPlayer> around(ServerLevel world, Vec3 origin, double distance) {
-        return world.getPlayers((player) -> player.position().distanceToSqr(origin) <= (distance*distance));
+        return PlayerLookup.around(world, origin, distance);
     }
 
     public static boolean networkS2C_CanSend(ServerPlayer player, CustomPacketPayload.Type<?> packetId) {
-        return true;
+        return ServerPlayNetworking.canSend(player, packetId);
     }
 
     public static void networkS2C_Send(ServerPlayer player, CustomPacketPayload payload) {
-        PacketDistributor.sendToPlayer(player, payload);
+        ServerPlayNetworking.send(player, payload);
     }
 
     public static void networkC2S_Send(CustomPacketPayload payload) {
-        PacketDistributor.sendToServer(payload);
+        ClientPlayNetworking.send(payload);
     }
 }

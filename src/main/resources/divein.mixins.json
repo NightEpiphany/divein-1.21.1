@@ -1,11 +1,12 @@
 {
   "required": true,
-  "package": "org.moigferdsrte.mixin",
+  "package": "com.moigferdsrte.divein.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
-  ],
   "injectors": {
     "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
   },
   "client": [
     "AbstractClientPlayerMixin",

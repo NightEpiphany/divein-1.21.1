@@ -1,4 +1,4 @@
-package org.moigferdsrte.event.api;
+package com.moigferdsrte.divein.event.api;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;

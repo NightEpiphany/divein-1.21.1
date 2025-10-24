@@ -1,8 +1,8 @@
-package org.moigferdsrte.network;
+package com.moigferdsrte.divein.network;
 
+import com.moigferdsrte.divein.extension.AnimationEffect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
-import org.moigferdsrte.extension.AnimationEffect;
 
 public class ClientNetwork {
 

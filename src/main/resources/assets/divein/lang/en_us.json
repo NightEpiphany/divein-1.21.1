@@ -1,14 +1,14 @@
 {
-  "divein.configuration.triggerSensitivity":"Animation Trigger Sensitivity",
-  "divein.configuration.fluidLevelDetectHeight":"Fluid Level Detect Height",
-  "divein.configuration.triggerDepth":"Minimum Animation Trigger Depth",
-  "divein.configuration.speedModifier":"Animation Speed",
-  "divein.configuration.section.divein.common.toml": "Common",
-  "divein.configuration.section.divein.common.toml.title": "Settings",
-  "divein.configuration.title": "Config",
-  "divein.configuration.fluidLevelDetectHeight.tooltip": "Max detect blocks of fluid underneath",
-  "divein.configuration.triggerSensitivity.tooltip": "Range: (LOWEST) 0 - 1 (HIGHEST)",
-  "divein.configuration.triggerDepth.tooltip": "Least fluid depth to activate the animation",
-  "divein.configuration.speedModifier.tooltip": "Playing speed",
-  "divein.networking.failed": "Network Failed"
+  "text.autoconfig.divein.option.triggerSensitivity":"Animation Trigger Sensitivity",
+  "text.autoconfig.divein.option.triggerSensitivity.@Tooltip":"Range: (LOWEST) 0 - 1 (HIGHEST)",
+  "text.autoconfig.divein.option.fluidLevelDetectHeight":"Fluid Level Detect Height",
+  "text.autoconfig.divein.option.fluidLevelDetectHeight.@Tooltip":"Max detect blocks of fluid underneath",
+  "text.autoconfig.divein.option.triggerDepth":"Minimum Animation Trigger Depth",
+  "text.autoconfig.divein.option.triggerDepth.@Tooltip":"Least fluid depth to activate the animation",
+  "text.autoconfig.divein.option.speedModifier":"Animation Speed",
+
+  "text.autoconfig.divein.option.disableCape.@Tooltip":"Due to the fact that 1.20.9+ changed the entity render state, the cape may rotate abnormally if animation triggered. So in default the cape is disabled. This will be fixed in the future.",
+  "text.autoconfig.divein.option.disableCape":"Disable Cape Render",
+
+  "text.autoconfig.divein.title":"Divein"
 }

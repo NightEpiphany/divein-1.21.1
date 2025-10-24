@@ -1,9 +1,9 @@
 {
-  "divein.configuration.triggerSensitivity": "動畫觸發靈敏度",
-  "divein.configuration.triggerSensitivity.tooltip": "範圍: (最低) 0 - 1 (最高)",
-  "divein.configuration.fluidLevelDetectHeight": "液面檢測高度",
-  "divein.configuration.fluidLevelDetectHeight.tooltip": "玩家自由落體時檢測下方液面的最大格數",
-  "divein.configuration.triggerDepth": "最小動畫觸發深度",
-  "divein.configuration.triggerDepth.tooltip": "動畫啟用的最小液體深度",
-  "divein.configuration.speedModifier":"動畫速度"
+  "text.autoconfig.divein.option.triggerSensitivity":"動畫觸發靈敏度",
+  "text.autoconfig.divein.option.triggerSensitivity.@Tooltip":"範圍: (最低) 0 - 1 (最高)",
+  "text.autoconfig.divein.option.fluidLevelDetectHeight":"液面檢測高度",
+  "text.autoconfig.divein.option.fluidLevelDetectHeight.@Tooltip":"玩家自由落體時檢測下方液面的最大格數",
+  "text.autoconfig.divein.option.triggerDepth":"最小動畫觸發深度",
+  "text.autoconfig.divein.option.triggerDepth.@Tooltip":"動畫啟用的最小液體深度",
+  "text.autoconfig.divein.option.speedModifier":"動畫速度"
 }
