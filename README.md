@@ -7,7 +7,7 @@
 > ![Dive in (Lava)](https://cdn.modrinth.com/data/cached_images/2c08d2add3fd167652df8ecae6d189766db230cd_0.webp)
 - A light weight clientside mod that adds custom animation when player drop into water or lava from a far distance.
 - Triggers when player free falling into the fluid source.
-- Currently still in dev, bugs may occour. 
+- Currently still in dev, bugs may occur. 
 - More version support comming soon.
 - Recommend to use with [BetterThirdPerson Mod](https://modrinth.com/mod/better-third-person) & [Effective Mod](https://modrinth.com/mod/effective) for better immersion.
-- Custom animation via [Playeranimator](https://modrinth.com/mod/playeranimator).
+- Custom animation via [Playeranimator](https://modrinth.com/mod/playeranimator) & [PAL]([Player Animation Library - Minecraft Mod](https://modrinth.com/mod/player-animation-library)).

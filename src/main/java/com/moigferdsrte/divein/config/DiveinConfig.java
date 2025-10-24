@@ -10,4 +10,7 @@ public class DiveinConfig implements ConfigData {
     public float triggerSensitivity = 0.615f;
     @ConfigEntry.Gui.Tooltip
     public int fluidLevelDetectHeight = 28;
+    @ConfigEntry.Gui.Tooltip
+    public int triggerDepth = 2;
+    public float speedModifier = 0.92323f;
 }

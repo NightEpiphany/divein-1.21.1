@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,8 +78,12 @@ public class Divein implements ModInitializer {
     public static boolean checkWaterBelow(Player player, int blocks) {
         if (player.isInWater()) return true;
         for (int i = 1; i <= blocks; i++) {
-            if (player.level().getBlockState(player.blockPosition().below(i)).getFluidState().getType() == Fluids.WATER &&
+            if (player.level().getBlockState(player.blockPosition().below(i)).is(Blocks.WATER) &&
                     player.level().getBlockState(player.blockPosition().below(i - 1)).is(BlockTags.AIR)) {
+                if (!player.level().getBlockState(player.blockPosition().below(i + 1)).is(Blocks.WATER)) return false;
+                for (int j = 1; j <= Divein.config.triggerDepth; j++) {
+                    if (player.level().getBlockState(player.blockPosition().below(i - 1 + j)).getFluidState().getType() != Fluids.WATER) return false;
+                }
                 return true;
             }
             if (!player.level().getBlockState(player.blockPosition().below(i)).is(BlockTags.AIR)) break;
@@ -91,6 +96,9 @@ public class Divein implements ModInitializer {
         for (int i = 1; i <= blocks; i++) {
             if (player.level().getBlockState(player.blockPosition().below(i)).getFluidState().getType() == Fluids.LAVA &&
                     player.level().getBlockState(player.blockPosition().below(i - 1)).is(BlockTags.AIR)) {
+                for (int j = 1; j <= Divein.config.triggerDepth; j++) {
+                    if (player.level().getBlockState(player.blockPosition().below(i - 1 + j)).getFluidState().getType() != Fluids.LAVA) return false;
+                }
                 return true;
             }
             if (!player.level().getBlockState(player.blockPosition().below(i)).is(BlockTags.AIR)) break;

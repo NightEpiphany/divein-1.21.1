@@ -38,6 +38,7 @@ public class DiveinClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+
         ClientPlayNetworking.registerGlobalReceiver(Packets.DiveAnimation.TYPE, (packet, context) -> ClientNetwork.handleDiveAnimation(packet));
     }
 

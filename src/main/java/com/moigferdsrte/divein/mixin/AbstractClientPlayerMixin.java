@@ -32,12 +32,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.*;
 
 @Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerMixin extends Player implements AnimatablePlayer {
 
     @Unique
     private static final Map<UUID, Boolean> playerAnimationStates = new HashMap<>();
+
+    @Unique
+    private final ExecutorService asyncPool = Executors.newSingleThreadExecutor();
 
     @Unique
     private final ModifierLayer<KeyframeAnimationPlayer> base = new ModifierLayer<>(null);
@@ -54,6 +58,7 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
     @DiveinEvent.SyncForServer
     @Override
     public void divein_1_21_1$playDiveAnimation(String animationName, Vec3 direction) {
+
         if (playerAnimationStates.getOrDefault(uuid, false)) return;
         playerAnimationStates.put(uuid, true);
         try {
@@ -66,23 +71,24 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
 
             divingDirection = direction;
 
-            speedModifier.speed = 0.8523f;
+            speedModifier.speed = Divein.config.speedModifier;
             base.replaceAnimationWithFade(
                     AbstractFadeModifier.functionalFadeIn(100, (modelName, type, value) -> value),
                     new KeyframeAnimationPlayer(copy.build())
                             .setFirstPersonMode(FirstPersonMode.DISABLED)
                             .setFirstPersonConfiguration(new FirstPersonConfiguration()
                                     .setShowRightArm(true)
+                                    .setShowLeftArm(true)
                                     .setShowLeftItem(false)));
 
-            new Thread(() -> {
+            asyncPool.execute(() -> {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(1500);
                     playerAnimationStates.put(uuid, false);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
-            }).start();
+            });
         } catch (Exception e) {
             Divein.LOGGER.error("Failed to play dive animation for player ", e);
             playerAnimationStates.put(uuid, false);
@@ -109,11 +115,6 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
         }
         return angle;
     }
-
-//    @Inject(method = "tick", at = @At("HEAD"))
-//    public void tick(CallbackInfo ci) {
-//        DiveinEvent.DIVEIN_WATER_EVENT.invoker().update(this, this.level());
-//    }
 
     @Unique
     private AdjustmentModifier createAdjustmentModifier() {
