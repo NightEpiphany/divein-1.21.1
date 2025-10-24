@@ -17,11 +17,23 @@ public class Config {
             .comment("Fluid Level Detect Height")
             .defineInRange("fluidLevelDetectHeight", 28, 0, Integer.MAX_VALUE);
 
+    public static final ModConfigSpec.IntValue MINIMUM_DEPTH = BUILDER
+            .comment("Minimum Animation Trigger Depth")
+            .defineInRange("triggerDepth", 2, 1, Integer.MAX_VALUE);
+
+    public static final ModConfigSpec.DoubleValue SPEED = BUILDER
+            .comment("Minimum Animation Trigger Depth")
+            .defineInRange("speedModifier", 0.92323d, 0, 10.0d);
+
     static final ModConfigSpec SPEC = BUILDER.build();
 
     public static int fluidLevelDetectHeight;
 
     public static double triggerSensitivity;
+
+    public static int triggerDepth;
+
+    public static double speedModifier;
 
 
     @SubscribeEvent
@@ -29,6 +41,8 @@ public class Config {
         if (event.getConfig().getSpec() == SPEC) {
             fluidLevelDetectHeight = DETECT_HEIGHT.get();
             triggerSensitivity = TRIGGER_SENSITIVITY.get();
+            triggerDepth = MINIMUM_DEPTH.get();
+            speedModifier = SPEED.get();
         }
     }
 }

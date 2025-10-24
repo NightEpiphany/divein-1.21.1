@@ -18,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.moigferdsrte.Config;
 import org.moigferdsrte.Divein;
 import org.moigferdsrte.event.TriggerEventHandler;
 import org.moigferdsrte.extension.AdjustmentModifier;
@@ -32,6 +33,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Mixin(AbstractClientPlayer.class)
 public abstract class AbstractClientPlayerMixin extends Player implements AnimatablePlayer {
@@ -40,7 +43,10 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
     private static final Map<UUID, Boolean> divein_1_21_1_neo$playerAnimationStates = new HashMap<>();
 
     @Unique
-    private final ModifierLayer<KeyframeAnimationPlayer> base = new ModifierLayer<>(null);
+    private final ExecutorService divein_1_21_1_neo$executorService = Executors.newSingleThreadExecutor();
+
+    @Unique
+    private final ModifierLayer<KeyframeAnimationPlayer> divein_1_21_1_neo$base = new ModifierLayer<>(null);
     @Unique
     private final SpeedModifier divein_1_21_1_neo$speedModifier = new SpeedModifier();
 
@@ -62,23 +68,24 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
             var copy = animation.mutableCopy();
             divein_1_21_1_neo$lastRollDirection = direction;
 
-            divein_1_21_1_neo$speedModifier.speed = 0.8523f;
-            base.replaceAnimationWithFade(
+            divein_1_21_1_neo$speedModifier.speed = (float) Config.speedModifier;
+            divein_1_21_1_neo$base.replaceAnimationWithFade(
                     AbstractFadeModifier.functionalFadeIn(100, (modelName, type, value) -> value),
                     new KeyframeAnimationPlayer(copy.build())
                             .setFirstPersonMode(FirstPersonMode.DISABLED)
                             .setFirstPersonConfiguration(new FirstPersonConfiguration()
                                     .setShowRightArm(true)
+                                    .setShowLeftArm(true)
                                     .setShowLeftItem(false)));
 
-            new Thread(() -> {
+            divein_1_21_1_neo$executorService.execute(() -> {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(1500);
                     divein_1_21_1_neo$playerAnimationStates.put(uuid, false);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
-            }).start();
+            });
         } catch (Exception e) {
             Divein.LOGGER.error("Failed to play dive animation for player ", e);
             divein_1_21_1_neo$playerAnimationStates.put(uuid, false);
@@ -88,9 +95,9 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
     @Inject(method = "<init>", at = @At("TAIL"))
     private void postInit(ClientLevel clientLevel, GameProfile gameProfile, CallbackInfo ci) {
         @SuppressWarnings("UnstableApiUsage") var stack = ((IAnimatedPlayer) this).getAnimationStack();
-        base.addModifier(divein_1_21_1_neo$speedModifier, 0);
+        divein_1_21_1_neo$base.addModifier(divein_1_21_1_neo$speedModifier, 0);
         divein_1_21_1_neo$speedModifier.speed = 1.02f;
-        stack.addAnimLayer(1000, base);
+        stack.addAnimLayer(1000, divein_1_21_1_neo$base);
     }
 
     @Unique

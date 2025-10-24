@@ -1,6 +1,9 @@
 {
   "divein.configuration.triggerSensitivity":"アニメトリガー感度",
+  "divein.configuration.triggerSensitivity.tooltip":"範囲:(最低)0 - 1(最高)",
   "divein.configuration.fluidLevelDetectHeight":"流体レベル高さを検出する",
-  "divein.configuration.fluidLevelDetectHeight.tooltip": "最大検出ブロック数です",
-  "divein.configuration.triggerSensitivity.tooltip": "範囲:(最低)0 - 1(最高)"
+  "divein.configuration.fluidLevelDetectHeight.tooltip":"最大検出ブロック数です",
+  "divein.configuration.triggerDepth":"最小アニメーショントリガー深度",
+  "divein.configuration.triggerDepth.tooltip":"アニメーションを起動するための最小液面深度",
+  "divein.configuration.speedModifier":"アニメーション速度"
 }

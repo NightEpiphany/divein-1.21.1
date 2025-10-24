@@ -1,10 +1,14 @@
 {
   "divein.configuration.triggerSensitivity":"Animation Trigger Sensitivity",
   "divein.configuration.fluidLevelDetectHeight":"Fluid Level Detect Height",
+  "divein.configuration.triggerDepth":"Minimum Animation Trigger Depth",
+  "divein.configuration.speedModifier":"Animation Speed",
   "divein.configuration.section.divein.common.toml": "Common",
   "divein.configuration.section.divein.common.toml.title": "Settings",
   "divein.configuration.title": "Config",
   "divein.configuration.fluidLevelDetectHeight.tooltip": "Max detect blocks of fluid underneath",
   "divein.configuration.triggerSensitivity.tooltip": "Range: (LOWEST) 0 - 1 (HIGHEST)",
+  "divein.configuration.triggerDepth.tooltip": "Least fluid depth to activate the animation",
+  "divein.configuration.speedModifier.tooltip": "Playing speed",
   "divein.networking.failed": "Network Failed"
 }
