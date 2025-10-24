@@ -12,5 +12,5 @@ public class DiveinConfig implements ConfigData {
     public int fluidLevelDetectHeight = 28;
     @ConfigEntry.Gui.Tooltip
     public int triggerDepth = 2;
-    public float speedModifier = 0.88323f;
+    public float speedModifier = 0.92323f;
 }

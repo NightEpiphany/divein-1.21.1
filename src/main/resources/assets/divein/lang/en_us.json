@@ -6,9 +6,5 @@
   "text.autoconfig.divein.option.triggerDepth":"Minimum Animation Trigger Depth",
   "text.autoconfig.divein.option.triggerDepth.@Tooltip":"Least fluid depth to activate the animation",
   "text.autoconfig.divein.option.speedModifier":"Animation Speed",
-
-  "text.autoconfig.divein.option.disableCape.@Tooltip":"Due to the fact that 1.20.9+ changed the entity render state, the cape may rotate abnormally if animation triggered. So in default the cape is disabled. This will be fixed in the future.",
-  "text.autoconfig.divein.option.disableCape":"Disable Cape Render",
-
   "text.autoconfig.divein.title":"Divein"
 }

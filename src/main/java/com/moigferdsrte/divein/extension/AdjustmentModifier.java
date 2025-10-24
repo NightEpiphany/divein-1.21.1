@@ -1,9 +1,10 @@
 package com.moigferdsrte.divein.extension;
 
-import com.zigythebird.playeranim.animation.PlayerAnimationController;
-import com.zigythebird.playeranimcore.animation.layered.modifier.AbstractModifier;
-import com.zigythebird.playeranimcore.enums.TransformType;
-import com.zigythebird.playeranimcore.math.Vec3f;
+import dev.kosmx.playerAnim.api.TransformType;
+import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
+import dev.kosmx.playerAnim.api.layered.modifier.AbstractModifier;
+import dev.kosmx.playerAnim.core.util.Vec3f;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -24,9 +25,9 @@ public final class AdjustmentModifier extends AbstractModifier {
 
     private float getFadeIn(float delta) {
         float fadeIn = 1;
-        if(this.getAnim() instanceof PlayerAnimationController player) {
-            float currentTick = player.getAnimationTicks() + delta;
-            fadeIn = currentTick / player.getAnimationData().getPartialTick();
+        if(this.getAnim() instanceof KeyframeAnimationPlayer player) {
+            float currentTick = player.getTick() + delta;
+            fadeIn = currentTick / (float) player.getData().beginTick;
             fadeIn = Math.min(fadeIn, 1F);
         }
         return fadeIn;
@@ -34,11 +35,11 @@ public final class AdjustmentModifier extends AbstractModifier {
 
     private float getFadeOut(float delta) {
         float fadeOut = 1;
-        if(this.getAnim() instanceof PlayerAnimationController player) {
-            float currentTick = player.getAnimationTicks() + delta;
+        if(this.getAnim() instanceof KeyframeAnimationPlayer player) {
+            float currentTick = player.getTick() + delta;
 
-            float position = (-1F) * (currentTick - player.getAnimationData().getPartialTick());
-            float length = player.getAnimationData().getPartialTick();
+            float position = (-1F) * (currentTick - player.getData().stopTick);
+            float length = player.getData().stopTick - player.getData().endTick;
             if (length > 0) {
                 fadeOut = position / length;
                 fadeOut = Math.min(fadeOut, 1F);
@@ -47,7 +48,23 @@ public final class AdjustmentModifier extends AbstractModifier {
         return fadeOut;
     }
 
+    @Override
+    public @NotNull Vec3f get3DTransform(@NotNull String modelName, @NotNull TransformType type, float tickDelta, @NotNull Vec3f value0) {
+        if (!enabled) {
+            return super.get3DTransform(modelName, type, tickDelta, value0);
+        }
 
+        var partModifier = source.apply(modelName);
+
+        var modifiedVector = value0;
+        var fade = getFadeIn(tickDelta) * getFadeOut(tickDelta);
+        if (partModifier.isPresent()) {
+            modifiedVector = super.get3DTransform(modelName, type, tickDelta, modifiedVector);
+            return transformVector(modifiedVector, type, partModifier.get(), fade);
+        } else {
+            return super.get3DTransform(modelName, type, tickDelta, value0);
+        }
+    }
 
     private Vec3f transformVector(Vec3f vector, TransformType type, PartModifier partModifier, float fade) {
         switch (type) {
@@ -55,7 +72,7 @@ public final class AdjustmentModifier extends AbstractModifier {
                 return vector.add(partModifier.offset);
             }
             case ROTATION -> {
-                return vector.add(partModifier.rotation.mul(fade));
+                return vector.add(partModifier.rotation.scale(fade));
             }
             case BEND -> {
                 return vector;
