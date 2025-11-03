@@ -34,7 +34,7 @@
 		"java": ">=21",
 		"fabric-api": "*",
         "cloth-config": "*",
-        "playeranimator": ">=2.0.0+1.21.1"
+        "player_animation_library": "*"
 	},
 	"suggests": {
 		"geckolib": "*",

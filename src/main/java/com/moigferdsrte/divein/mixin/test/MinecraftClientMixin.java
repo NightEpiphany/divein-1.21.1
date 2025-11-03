@@ -13,7 +13,7 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "startAttack", at = @At("HEAD"), cancellable = true)
     private void ATTACK(CallbackInfoReturnable<Boolean> cir) {
         System.out.println("MinecraftClientMixin - startAttack");
-        DiveinClient.playDiveAnimation(true);
+        //DiveinClient.playDiveAnimation(true);
         cir.setReturnValue(true);
     }
 }
