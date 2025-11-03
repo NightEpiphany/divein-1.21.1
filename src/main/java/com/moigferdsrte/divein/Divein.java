@@ -4,6 +4,7 @@ import com.moigferdsrte.divein.config.DiveinConfig;
 import com.moigferdsrte.divein.event.DiveinEvent;
 import com.moigferdsrte.divein.network.Packets;
 import com.moigferdsrte.divein.network.ServerNetwork;
+import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
@@ -39,14 +40,21 @@ public class Divein implements ModInitializer {
         configHolder = AutoConfig.getConfigHolder(DiveinConfig.class);
         config = configHolder.getConfig();
 
-
+        DiveinEvent.DIVEIN_WATER_EVENT.register((player, level, controller) -> {
+            if (controller.getAnimation() == null) return;
+            if (player.isFallFlying() || (player.onGround() && !player.isInWater()) || player.isSwimming()) {
+                if (controller.getAnimation() instanceof KeyframeAnimationPlayer keyframeAnimationPlayer) {
+                    keyframeAnimationPlayer.stop();
+                }
+            }
+        });
 
 		LOGGER.info("Divein!");
 	}
 
     @Deprecated
     public void eventHook() {
-        DiveinEvent.DIVEIN_WATER_EVENT.register((player, level) -> {
+        DiveinEvent.DIVEIN_WATER_EVENT.register((player, level, c) -> {
             if (!player.level().isClientSide()) return;
             float sensitivity = Divein.config.triggerSensitivity;
             if (sensitivity < 0) sensitivity = 0;

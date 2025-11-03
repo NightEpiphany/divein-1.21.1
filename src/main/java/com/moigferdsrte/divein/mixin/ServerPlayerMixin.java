@@ -25,6 +25,5 @@ public abstract class ServerPlayerMixin extends Player {
 
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick(CallbackInfo ci) {
-        if (!this.serverLevel().isClientSide) DiveinEvent.DIVEIN_WATER_EVENT.invoker().update(this, this.serverLevel());
     }
 }

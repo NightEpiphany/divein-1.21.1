@@ -45,6 +45,7 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
 
     @Unique
     private final ModifierLayer<KeyframeAnimationPlayer> base = new ModifierLayer<>(null);
+
     @Unique
     private final SpeedModifier speedModifier = new SpeedModifier();
 
@@ -93,6 +94,11 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
             Divein.LOGGER.error("Failed to play dive animation for player ", e);
             playerAnimationStates.put(uuid, false);
         }
+    }
+
+    @Inject(method = "tick()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;getDeltaMovement()Lnet/minecraft/world/phys/Vec3;", shift = At.Shift.AFTER))
+    private void tick(CallbackInfo ci) {
+        DiveinEvent.DIVEIN_WATER_EVENT.invoker().update(this, this.level(), base);
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))

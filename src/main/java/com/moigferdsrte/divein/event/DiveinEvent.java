@@ -7,10 +7,10 @@ public class DiveinEvent {
 
 
     public static final Event<DiveinWaterCallback> DIVEIN_WATER_EVENT =
-            EventFactory.createArrayBacked(DiveinWaterCallback.class, call -> (player, level) -> {
+            EventFactory.createArrayBacked(DiveinWaterCallback.class, call -> (player, level, controller) -> {
                 if (player.getDeltaMovement().y < 0)
                     for (DiveinWaterCallback callback : call) {
-                        callback.update(player, level);
+                        callback.update(player, level, controller);
                     }
             });
 
