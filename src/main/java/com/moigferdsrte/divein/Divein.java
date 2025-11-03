@@ -14,6 +14,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Fluids;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +39,12 @@ public class Divein implements ModInitializer {
         configHolder = AutoConfig.getConfigHolder(DiveinConfig.class);
         config = configHolder.getConfig();
 
-
+        DiveinEvent.DIVEIN_WATER_EVENT.register((player, level, controller) -> {
+            if (controller == null) return;
+            if (player.isFallFlying() || (player.onGround() && !player.isInWater()) || player.isSwimming()) {
+                controller.stop();
+            }
+        });
 
 		LOGGER.info("Divein!");
 	}

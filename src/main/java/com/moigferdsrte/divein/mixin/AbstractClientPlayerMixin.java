@@ -14,13 +14,18 @@ import com.zigythebird.playeranimcore.api.firstPerson.FirstPersonMode;
 import com.zigythebird.playeranimcore.math.Vec3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.ClientAvatarEntity;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +42,9 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
     @Unique
     private final ExecutorService asyncPool = Executors.newSingleThreadExecutor();
 
+    @Nullable
+    @Unique
+    PlayerAnimationController controller = null;
 
     @Unique
     private final SpeedModifier speedModifier = new SpeedModifier(Divein.config.speedModifier);
@@ -52,12 +60,12 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
     @Override
     public void divein_1_21_1$playDiveAnimation(String animationName, Vec3 direction) {
         if (Minecraft.getInstance().player == null) return;
+        AbstractClientPlayer abstractClientPlayer = (AbstractClientPlayer) (Object) this;
         ResourceLocation loc = ResourceLocation.fromNamespaceAndPath(Divein.MOD_ID, animationName);
-        PlayerAnimationController controller = (PlayerAnimationController) PlayerAnimationAccess
-                .getPlayerAnimationLayer((AbstractClientPlayer)(Object) this, loc);
-        if (this.isSwimming()) controller.stop();
         if (playerAnimationStates.getOrDefault(uuid, false)) return;
         playerAnimationStates.put(uuid, true);
+        controller = (PlayerAnimationController) PlayerAnimationAccess
+                .getPlayerAnimationLayer(abstractClientPlayer, loc);
         try {
             controller.setFirstPersonConfiguration(new FirstPersonConfiguration()
                     .setShowRightArm(true)
@@ -79,6 +87,11 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
             Divein.LOGGER.error("Failed to play dive animation for player ", e);
             playerAnimationStates.put(uuid, false);
         }
+    }
+
+    @Inject(method = "tick()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/ClientAvatarState;tick(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;)V", shift = At.Shift.AFTER))
+    public void tick(CallbackInfo ci) {
+        DiveinEvent.DIVEIN_WATER_EVENT.invoker().update(this, this.level(), this.controller);
     }
 
     @Unique
