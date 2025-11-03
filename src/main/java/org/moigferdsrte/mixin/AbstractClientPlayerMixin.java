@@ -92,6 +92,16 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
         }
     }
 
+    @Inject(method = "tick()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;getDeltaMovement()Lnet/minecraft/world/phys/Vec3;", shift = At.Shift.AFTER))
+    private void tick(CallbackInfo ci) {
+        if (divein_1_21_1_neo$base.getAnimation() == null) return;
+        if (this.isFallFlying() || (this.onGround() && !this.isInWater()) || this.isSwimming()) {
+            if (divein_1_21_1_neo$base.getAnimation() instanceof KeyframeAnimationPlayer keyframeAnimationPlayer) {
+                keyframeAnimationPlayer.stop();
+            }
+        }
+    }
+
     @Inject(method = "<init>", at = @At("TAIL"))
     private void postInit(ClientLevel clientLevel, GameProfile gameProfile, CallbackInfo ci) {
         @SuppressWarnings("UnstableApiUsage") var stack = ((IAnimatedPlayer) this).getAnimationStack();
@@ -111,11 +121,6 @@ public abstract class AbstractClientPlayerMixin extends Player implements Animat
         }
         return angle;
     }
-
-//    @Inject(method = "tick", at = @At("HEAD"))
-//    public void tick(CallbackInfo ci) {
-//        DiveinEvent.DIVEIN_WATER_EVENT.invoker().update(this, this.level());
-//    }
 
     @Unique
     private AdjustmentModifier divein_1_21_1_neo$createAdjustmentModifier() {

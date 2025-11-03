@@ -4,6 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Items;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
@@ -55,13 +57,15 @@ public abstract class ClientPacketSenderMixin {
             return;
         }
         boolean hasRes = player.hasEffect(MobEffects.FIRE_RESISTANCE);
+        boolean isWearingElytra = player.getItemBySlot(EquipmentSlot.CHEST).is(Items.ELYTRA);
         double sensitivity = Config.triggerSensitivity;
         if (sensitivity < 0) sensitivity = 0;
         if (sensitivity > 1) sensitivity = 1;
         boolean isFalling = player.getDeltaMovement().y < sensitivity - 1.0f
                 && !player.onGround()
                 && Objects.requireNonNull(client.level).getBlockState(player.blockPosition().below()).is(BlockTags.AIR)
-                && !player.getAbilities().flying;
+                && !player.getAbilities().flying
+                && !isWearingElytra;
         if (isFalling || hasRes) {
             if (divein_1_21_1_neo$waterDrop) {
                 var visuals = new AnimationEffect.Visuals("dive", AnimationEffect.Particles.DIVE);
