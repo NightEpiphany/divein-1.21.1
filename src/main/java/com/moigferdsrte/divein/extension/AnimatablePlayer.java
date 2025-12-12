@@ -1,6 +1,6 @@
 package com.moigferdsrte.divein.extension;
 
-import com.moigferdsrte.divein.event.DiveinEvent;
+import com.moigferdsrte.divein.events.DiveinEvent;
 import net.minecraft.world.phys.Vec3;
 
 public interface AnimatablePlayer {

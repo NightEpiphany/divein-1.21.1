@@ -1,6 +1,6 @@
-package com.moigferdsrte.divein.event;
+package com.moigferdsrte.divein.events;
 
-import dev.kosmx.playerAnim.api.layered.IActualAnimation;
+import dev.kosmx.playerAnim.api.layered.IAnimation;
 import dev.kosmx.playerAnim.api.layered.ModifierLayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -8,5 +8,5 @@ import net.minecraft.world.level.Level;
 @FunctionalInterface
 public interface DiveinWaterCallback {
 
-    void update(Player player, Level level, ModifierLayer<? extends IActualAnimation<?>> layer);
+    void update(Player player, Level level, ModifierLayer<? extends IAnimation> controller);
 }

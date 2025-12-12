@@ -5,10 +5,10 @@ import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import me.shedaniel.autoconfig.AutoConfig;
 
-public class ConfigMenu implements ModMenuApi {
+public class ModMenuConfig implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return s -> AutoConfig.getConfigScreen(DiveinConfig.class, s).get();
+        return screen -> AutoConfig.getConfigScreen(DiveinConfig.class, screen).get();
     }
 }

@@ -3,13 +3,13 @@
 	"id": "divein",
 	"version": "${version}",
 	"name": "Divein",
-	"description": "Custom animation to dive into water & lava!",
+	"description": "Custom animation to dive into water \\u0026 lava!",
 	"authors": [
 		"NightEpiphany"
 	],
 	"contact": {
-		"homepage": "https://modrinth.com/mod/dive-in/",
-		"sources": "https://github.com/NightEpiphany/divein-1.21.1"
+      "homepage": "https://modrinth.com/mod/dive-in/",
+      "sources": "https://github.com/NightEpiphany/divein-1.21.1"
 	},
 	"license": "MIT",
 	"icon": "assets/divein/icon.png",
@@ -22,7 +22,7 @@
         "com.moigferdsrte.divein.DiveinClient"
       ],
       "modmenu": [
-        "com.moigferdsrte.divein.compact.ConfigMenu"
+        "com.moigferdsrte.divein.compact.ModMenuConfig"
       ]
 	},
 	"mixins": [
@@ -30,15 +30,14 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.16",
-		"minecraft": "~1.21.1",
-		"java": ">=21",
-		"fabric-api": "*",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
         "cloth-config": "*",
-        "playeranimator": ">=2.0.0+1.21.1"
+		"fabric-api": "*"
 	},
-	"suggests": {
-		"geckolib": "*",
-        "modmenu": "*",
-        "betterthirdperson": "*"
-	}
+    "suggests": {
+      "geckolib": "*",
+      "modmenu": "*",
+      "betterthirdperson": "*"
+    }
 }
